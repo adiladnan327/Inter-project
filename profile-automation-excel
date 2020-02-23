@@ -1,0 +1,73 @@
+
+'''' Adil Adnan Mohammed- Internship - William Business School- Bishop's University-
+
+
+
+Private Sub Worksheet_SelectionChange(ByVal Target As Range)
+    Dim course_num As Integer
+    Dim flag As Integer
+    
+    course_num = 0
+    Dim strFileToOpen As String
+    
+    For i = 2 To 600
+        SourceFileTempName = ActiveWorkbook.Name
+    
+        If Not Intersect(Cells(i, 1), Target) Is Nothing Then
+            'MsgBox "ok"
+            
+            strFileToOpen = Application.GetOpenFilename _
+            (Title:="Please choose a file to open", _
+            FileFilter:="Excel Files *.xlsx* (*.xlsx*),")
+            
+            If strFileToOpen = "False" Then
+                MsgBox "No file selected.", vbExclamation, "Sorry!"
+                Exit Sub
+            Else
+                Workbooks.Open Filename:=strFileToOpen
+            End If
+            TargetFileTempName = ActiveWorkbook.Name
+            
+            For j = 15 To 100
+                If (Workbooks(TargetFileTempName).Worksheets("Profile_Sheet").Cells(j, 3).Value <> "") Then
+                    course_num = course_num + 1
+                End If
+            Next
+            
+            'Workbooks(TargetFileTempName).Worksheets("Sheet1").Cells(31, 3).Value = "ok"
+            Workbooks(TargetFileTempName).Worksheets("Profile_Sheet").Cells(3, 3).Value = Workbooks(SourceFileTempName).Sheets("studentdata2").Cells(i, 2).Value
+            Workbooks(TargetFileTempName).Worksheets("Profile_Sheet").Cells(3, 4).Value = Workbooks(SourceFileTempName).Sheets("studentdata2").Cells(i, 3).Value
+            Workbooks(TargetFileTempName).Worksheets("Profile_Sheet").Cells(3, 7).Value = Workbooks(SourceFileTempName).Sheets("studentdata2").Cells(i, 1).Value
+            Workbooks(TargetFileTempName).Worksheets("Profile_Sheet").Cells(7, 4).Value = Workbooks(SourceFileTempName).Sheets("studentdata2").Cells(i, 10).Value
+            Workbooks(TargetFileTempName).Worksheets("Profile_Sheet").Cells(7, 7).Value = Workbooks(SourceFileTempName).Sheets("studentdata2").Cells(i, 11).Value
+            
+            For i1 = 2 To 600
+            
+                If (Workbooks(SourceFileTempName).Sheets("studentdata2").Cells(i1, 1).Value = Workbooks(SourceFileTempName).Sheets("studentdata2").Cells(i, 1).Value) Then
+                    flag = 0
+                    For i2 = 15 To course_num + 14
+                        If (Workbooks(TargetFileTempName).Worksheets("Profile_Sheet").Cells(i2, 3).Value = Workbooks(SourceFileTempName).Sheets("studentdata2").Cells(i1, 4).Value) Then
+                            'MsgBox "bbb"
+                            Workbooks(TargetFileTempName).Worksheets("Profile_Sheet").Cells(i2, 4).Value = Workbooks(SourceFileTempName).Sheets("studentdata2").Cells(i1, 6).Value
+                            Workbooks(TargetFileTempName).Worksheets("Profile_Sheet").Cells(i2, 5).Value = Workbooks(SourceFileTempName).Sheets("studentdata2").Cells(i1, 10).Value
+                            flag = 1
+                        End If
+                    Next
+                    
+                    If flag = 0 Then
+                        course_num = course_num + 1
+                        Workbooks(TargetFileTempName).Worksheets("Profile_Sheet").Cells(14 + course_num, 3).Value = Workbooks(SourceFileTempName).Sheets("studentdata2").Cells(i1, 4).Value
+                        Workbooks(TargetFileTempName).Worksheets("Profile_Sheet").Cells(14 + course_num, 4).Value = Workbooks(SourceFileTempName).Sheets("studentdata2").Cells(i1, 6).Value
+                        Workbooks(TargetFileTempName).Worksheets("Profile_Sheet").Cells(14 + course_num, 5).Value = Workbooks(SourceFileTempName).Sheets("studentdata2").Cells(i1, 10).Value
+                    End If
+                End If
+            Next
+            
+            Workbooks(TargetFileTempName).Save
+        End If
+    Next
+End Sub
+
+
+
+
